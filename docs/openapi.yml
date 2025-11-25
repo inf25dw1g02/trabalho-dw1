@@ -1,0 +1,102 @@
+openapi: 3.0.0
+info:
+  title: API de Gestão de Biblioteca - inf25dw1g02
+  description: |
+    API RESTful para gerir os recursos de uma Biblioteca Digital, desenvolvida em Node.js e MySQL.
+    A API cumpre os requisitos de Arquitetura REST, CRUD (4 verbos HTTP), e utiliza JSON.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api 
+    description: Servidor de Desenvolvimento Local (A porta 8080 mapeia para a porta 3000 do container Node.js)
+
+paths:
+  /autores:
+    get:
+      tags: ["Autores"]
+      summary: Mostra todos os Autores 
+      responses:
+        '200':
+          description: Lista de autores devolvida com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Autor'
+    post:
+      tags: ["Autores"]
+      summary: Cria um novo Autor 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutorInput'
+      responses:
+        '201':
+          description: Autor criado com sucesso.
+  
+  /autores/{id}:
+    get:
+      tags: ["Autores"]
+      summary: Obtém um Autor pelo ID 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Autor encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Autor'
+        '404':
+          description: Autor não encontrado.
+    put:
+      tags: ["Autores"]
+      summary: Atualiza um Autor existente 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutorInput'
+      responses:
+        '200':
+          description: Autor atualizado com sucesso.
+    delete:
+      tags: ["Autores"]
+      summary: Elimina um Autor 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Autor eliminado com sucesso.
+
+components:
+  schemas:
+    Autor:
+      type: object
+      properties:
+        id: { type: "integer", readOnly: true, description: "ID único do autor." }
+        nome: { type: "string" }
+        nacionalidade: { type: "string" }
+    AutorInput:
+      type: object
+      required: ["nome"]
+      properties:
+        nome: { type: "string" }
+        nacionalidade: { type: "string" }
