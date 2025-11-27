@@ -86,6 +86,32 @@ paths:
         '204':
           description: Autor eliminado com sucesso.
 
+  /utilizadores:
+    get:
+      tags: ["Utilizadores"]
+      summary: Mostra todos os Utilizadores 
+      responses:
+        '200':
+          description: Lista de utilizadores devolvida com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Utilizador'
+    post:
+      tags: ["Utilizadores"]
+      summary: Cria um novo Utilizador 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UtilizadorInput'
+      responses:
+        '201':
+          description: Utilizador criado com sucesso.
+
 components:
   schemas:
     Autor:
@@ -100,3 +126,17 @@ components:
       properties:
         nome: { type: "string" }
         nacionalidade: { type: "string" }
+    Utilizador:
+      type: object
+      properties:
+        id: { type: "integer", readOnly: true }
+        nome: { type: "string" }
+        email: { type: "string" }
+        numero_estudante: { type: "string" }
+    UtilizadorInput:
+      type: object
+      required: ["nome", "email", "numero_estudante"]
+      properties:
+        nome: { type: "string" }
+        email: { type: "string" }
+        numero_estudante: { type: "string" }

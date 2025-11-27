@@ -1,5 +1,6 @@
 import express from 'express';
 import autorRoutes from './routes/autorRoutes.js';
+import utilizadorRoutes from './routes/utilizadorRoutes.js';
 import pool from './config/db.js';
 
 const app = express();
@@ -9,6 +10,7 @@ app.use(express.json());
 
 /* Routes */
 app.use('/api/autores', autorRoutes);
+app.use('/api/utilizadores', utilizadorRoutes);
 
 /* Validate */
 app.get('/', (req, res) => {
@@ -16,6 +18,7 @@ app.get('/', (req, res) => {
         message: "Serviço REST da Biblioteca a funcionar.",
         endpoints: {
             autores: "http://localhost:8080/api/autores",
+            utilizadores: "http://localhost:8080/api/utilizadores",
         }
     });
 });
