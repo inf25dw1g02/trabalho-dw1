@@ -18,7 +18,7 @@ app.use('/api/emprestimos', emprestimoRoutes);
 
 app.get('/', (req, res) => {
     res.status(200).json({ 
-        message: "Serviço REST da Biblioteca (4 Recursos) a funcionar.",
+        message: "Serviço REST da Biblioteca",
         endpoints: {
             autores: "http://localhost:8080/api/autores",
             livros: "http://localhost:8080/api/livros",
