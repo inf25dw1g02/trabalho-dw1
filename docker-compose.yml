@@ -10,7 +10,7 @@ services:
       MYSQL_USER: user_biblioteca
       MYSQL_PASSWORD: NL7PiF67HiZAN8i
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./src/db/setup.sql:/docker-entrypoint-initdb.d/setup.sql:ro 
@@ -19,7 +19,7 @@ services:
     build: .
     restart: always
     ports:
-      - "8080:3000"
+      - "8088:3000"
     environment:
       DB_HOST: db
       DB_USER: user_biblioteca

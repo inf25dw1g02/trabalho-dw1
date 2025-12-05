@@ -86,6 +86,40 @@ paths:
         '204':
           description: Autor eliminado com sucesso.
 
+  /livros:
+    get:
+      tags: ["Livros"]
+      summary: Mostra todos os Livros (Suporta filtro por Autor)
+      description: Requisito Valorizado: Filtros através de parâmetros HTTP (id_autor).
+      parameters:
+        - name: id_autor
+          in: query
+          description: Filtra livros pelo ID do autor (Chave Estrangeira).
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de livros devolvida.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Livro'
+    post:
+      tags: ["Livros"]
+      summary: Adiciona um novo Livro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LivroInput'
+      responses:
+        '201':
+          description: Livro adicionado com sucesso.
+
   /utilizadores:
     get:
       tags: ["Utilizadores"]
@@ -111,6 +145,71 @@ paths:
       responses:
         '201':
           description: Utilizador criado com sucesso.
+
+/emprestimos:
+    get:
+      tags: ["Empréstimos"]
+      summary: Mostra todos os Empréstimos
+      responses:
+        '200':
+          description: Lista de empréstimos devolvida com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Emprestimo'
+    post:
+      tags: ["Empréstimos"]
+      summary: Cria um novo Empréstimo
+      description: Cria um registo de empréstimo com a data atual.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmprestimoInput'
+      responses:
+        '201':
+          description: Empréstimo registado com sucesso.
+  
+  /emprestimos/{id}:
+    put:
+      tags: ["Empréstimos"]
+      summary: Atualiza um Empréstimo (Registar Devolução)
+      description: Principalmente usado para registar a data de devolução de um livro.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_devolucao:
+                  type: string
+                  format: date
+                  description: Data em que o livro foi devolvido (YYYY-MM-DD).
+      responses:
+        '200':
+          description: Devolução registada com sucesso.
+    delete:
+      tags: ["Empréstimos"]
+      summary: Elimina um Empréstimo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Empréstimo eliminado com sucesso.
 
 components:
   schemas:
@@ -140,3 +239,31 @@ components:
         nome: { type: "string" }
         email: { type: "string" }
         numero_estudante: { type: "string" }
+        Livro:
+      type: object
+      properties:
+        id: { type: "integer", readOnly: true }
+        titulo: { type: "string" }
+        ano_publicacao: { type: "integer" }
+        id_autor: { type: "integer", description: "ID do autor (Foreign Key)." }
+    LivroInput:
+      type: object
+      required: ["titulo", "id_autor"]
+      properties:
+        titulo: { type: "string" }
+        ano_publicacao: { type: "integer" }
+        id_autor: { type: "integer" }
+         Emprestimo:
+      type: object
+      properties:
+        id: { type: "integer", readOnly: true }
+        id_livro: { type: "integer" }
+        id_utilizador: { type: "integer" }
+        data_emprestimo: { type: "string", format: "date" }
+        data_devolucao: { type: "string", format: "date", nullable: true }
+    EmprestimoInput:
+      type: object
+      required: ["id_livro", "id_utilizador"]
+      properties:
+        id_livro: { type: "integer" }
+        id_utilizador: { type: "integer" }
